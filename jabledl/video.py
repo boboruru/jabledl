@@ -10,6 +10,7 @@ class Video:
         ''' Video infomations '''
         self.url               = url
         self.car_number        = None
+        self.full_title        = None
 
         ''' M3U8 infomations '''
         self.m3u8              = None
@@ -50,6 +51,10 @@ class Video:
 
     def get_car_number(self):
         self.car_number = self.soup.title.text.split(' ')[0].upper()
+        # 完整標題：去掉末尾 " - Jable" 之類的後綴，並清除 Windows 不合法字元
+        raw = self.soup.title.text.strip()
+        raw = re.sub(r'\s*[-|–]\s*[Jj]able.*$', '', raw).strip()
+        self.full_title = re.sub(r'[\\/:*?"<>|]', '', raw)
 
 
     def get_m3u8(self):
